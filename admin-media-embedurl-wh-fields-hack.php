@@ -7,28 +7,9 @@
 	Author URI: http://ikfi.ru
 */
 
-/*
-	Default width and height for embedded data filter
-*/
-define('ADMIN_MEDIA_WH_HACK_DEFAULT_EMBED_WIDTH', 750);
-define('ADMIN_MEDIA_WH_HACK_DEFAULT_EMBED_HEIGHT', 375);
-
-
 ////////////////////
 //    FILTERS
 ////////////////////
-
-/*
-	Default embed width/height filter
-*/
-function admin_media_wh_hack_modify_embed_defaults($size, $url) {
-    return array(
-        'width'  => ADMIN_MEDIA_WH_HACK_DEFAULT_EMBED_WIDTH,
-        'height' => ADMIN_MEDIA_WH_HACK_DEFAULT_EMBED_HEIGHT,
-        'url' => $url
-    );
-}
-add_filter( 'embed_defaults', 'admin_media_wh_hack_modify_embed_defaults', 1, 3);
 
 /*
 	Redefine processing of embed code
