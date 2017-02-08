@@ -17,11 +17,18 @@
 function admin_media_wh_hack_media_send_to_editor($html, $src, $link_text) {
     if(substr($html, 0, 7) == '[embed]' && $src !== null) {
         $html = '[embed';
-        if(isset($_POST['width']) && preg_match('/^\d+%?$/', $_POST['width'])) { //is_numeric($_POST['width'])) {
-            $html .= ' width=' . $_POST['width'];
+        if(isset($_POST['width'])) {
+            $embed_width = sanitize_text_field($_POST['width']);
+            
+            // there can be only numeric || percent values
+            if(preg_match('/^\d+%?$/', $embed_width))
+                $html .= ' width=' . $embed_width;
         }
-        if(isset($_POST['height']) && preg_match('/^\d+%?$/', $_POST['height'])) { //is_numeric($_POST['height'])) {
-            $html .= ' height=' . $_POST['height'];
+        if(isset($_POST['height'])) {
+            $embed_height = sanitize_text_field($_POST['height']);
+            
+            if(preg_match('/^\d+%?$/', $embed_height))
+                $html .= ' height=' . $embed_height;
         }
         $html .= ']' . $src . '[/embed]';
     }
@@ -34,8 +41,8 @@ add_filter( 'file_send_to_editor_url', 'admin_media_wh_hack_media_send_to_editor
 	Redefine processing output to client
 */
 function admin_media_wh_hack_oembed_html($data, $url, $args) {
-    $data = preg_replace("/width=\"[^\"]+\"/", 'width="' . $args['width'] . '"', $data);
-    $data = preg_replace("/height=\"[^\"]+\"/", 'height="' . $args['height'] . '"', $data);
+    $data = preg_replace("/width=\"[^\"]+\"/", 'width="' . esc_attr($args['width']) . '"', $data);
+    $data = preg_replace("/height=\"[^\"]+\"/", 'height="' . esc_attr($args['height']) . '"', $data);
     return $data;
 }
 add_filter('embed_oembed_html', 'admin_media_wh_hack_oembed_html', 10, 3);
